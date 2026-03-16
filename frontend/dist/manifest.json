@@ -1,0 +1,18 @@
+{
+  "name": "AgriVista Africa",
+  "short_name": "AgriVista",
+  "description": "Yield prediction, fertilizer & pest advice, marketplace — Nigeria & West Africa",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#5c4033",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
