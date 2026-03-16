@@ -100,6 +100,14 @@ agri-ai-africa/
 
 Maize, rice, cassava, yam, sorghum, cowpea, groundnut, soybean, cocoa, oil palm, millet, cocoyam, sesame, tomato, pepper, rubber, cotton, beans, fio fio (pigeon pea), akidi (aligned with Nigerian/West African production). Each crop has best-planting-window advice based on annual weather (rainfall and temperature).
 
+## Deploy backend on Render
+
+- **Root directory:** `backend`
+- **Build command:** `pip install -r requirements.txt`
+- **Start command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Environment:** Add `PYTHON_VERSION` = `3.10.12` if the build fails (or use the `runtime.txt` in `backend/`).
+- After deploy, set your frontend’s `VITE_API_BASE` to the Render URL (e.g. `https://your-service.onrender.com`).
+
 ## Environment
 
 - Backend: copy `backend/.env.example` to `backend/.env`. Open-Meteo works without an API key.
