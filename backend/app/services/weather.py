@@ -3,6 +3,16 @@ import httpx
 from app.config import settings
 
 
+def _fallback_weather() -> dict:
+    """Return default weather when API is unavailable (e.g. 429 rate limit)."""
+    return {
+        "temp_avg_c": 28.0,
+        "rainfall_mm": 0.0,
+        "humidity_avg": 70.0,
+        "forecast_7d": [],
+    }
+
+
 async def get_weather_forecast(lat: float, lon: float, days: int = 14) -> dict:
     """Fetch daily weather forecast for a location (Nigeria/West Africa friendly)."""
     url = f"{settings.open_meteo_base}/v1/forecast"
@@ -13,10 +23,17 @@ async def get_weather_forecast(lat: float, lon: float, days: int = 14) -> dict:
         "timezone": "Africa/Lagos",
         "forecast_days": min(days, 16),
     }
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        resp = await client.get(url, params=params)
-        resp.raise_for_status()
-        data = resp.json()
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            resp = await client.get(url, params=params)
+            resp.raise_for_status()
+            data = resp.json()
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == 429:
+            return _fallback_weather()
+        raise
+    except Exception:
+        return _fallback_weather()
     daily = data.get("daily", {})
     n = len(daily.get("time", []))
     if n == 0:
